@@ -3,6 +3,41 @@
 import sys
 from PIL import Image, ImageDraw, ImageFont
 
+class Picture:
+    def __init__(self, file, frase):
+        self.text = Text(frase, 600, 'rgb(255, 255, 255)')
+        self.file = "data/calling-of-saint-matthew.jpeg"
+        self.nome = self.file.split('/')[-1]
+        self.imagem = Image.open(self.file)
+        self.sizeW, self.SizeH = self.image.size
+
+    def getSize():
+        return self.sizeW, self.sizeH
+
+    def getNome():
+        return self.nome
+
+
+
+class Text:
+    def __init__(self, frase, tamanho, color):
+        self.frase = frase
+        self.fonte = "data/font/Pirata_One/PirataOne-Regular.ttf"
+        self.tamanho = tamanho
+        self.SizeH, self.sizeW = draw.textsize(nObra, fonte_obra)
+        self.color = color
+
+        def getSize():
+            return self.sizeW, self.sizeH
+
+        def getNome():
+            return self.nome
+
+
+
+
+
+
 # Get the name input passed
 if len(sys.argv) > 2:
     nObra = sys.argv[1]
