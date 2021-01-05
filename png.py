@@ -4,12 +4,13 @@ import sys
 from PIL import Image, ImageDraw, ImageFont
 
 # Get the name input passed
-# if len(sys.argv) > 2:
-#     nObra = sys.argv[1]
-#     nAutor = sys.argv[2]
+if len(sys.argv) > 2:
+    nObra = sys.argv[1]
+    nAutor = sys.argv[2]
+else:
+    nObra = "Calling of\nSt. Matthew"
+    nAutor = 'Michelangelo Merisi da Caravaggio'
 
-nObra = "Calling of\nSt. Matthew"
-nAutor = 'Michelangelo Merisi da Caravaggio'
 font = "data/font/Pirata_One/PirataOne-Regular.ttf"
 imageDir = "data/calling-of-saint-matthew.jpeg"
 color = 'rgb(255, 255, 255)'
