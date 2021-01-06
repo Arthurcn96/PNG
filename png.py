@@ -3,83 +3,57 @@
 import sys
 from PIL import Image, ImageDraw, ImageFont
 
-class Picture:
-    def __init__(self, file, frase):
-        self.text = Text(frase, 600, 'rgb(255, 255, 255)')
-        self.file = "data/calling-of-saint-matthew.jpeg"
-        self.nome = self.file.split('/')[-1]
-        self.imagem = Image.open(self.file)
-        self.sizeW, self.SizeH = self.image.size
-
-    def getSize():
-        return self.sizeW, self.sizeH
-
-    def getNome():
-        return self.nome
-
-
-
-class Text:
-    def __init__(self, frase, tamanho, color):
-        self.frase = frase
-        self.fonte = "data/font/Pirata_One/PirataOne-Regular.ttf"
-        self.tamanho = tamanho
-        self.SizeH, self.sizeW = draw.textsize(nObra, fonte_obra)
+class Texto:
+    def __init__(self, fileFonte, frase, tamanho, color):
+        self.sizeW = None
+        self.sizeH = None
         self.color = color
-
-        def getSize():
-            return self.sizeW, self.sizeH
-
-        def getNome():
-            return self.nome
+        self.frase = frase
+        self.tamanho = tamanho
+        self.fileFonte = fileFonte
+        self.fonte = ImageFont.truetype(self.fileFonte, size = tamanho)
 
 
+class Picture(object):
+
+    def __init__(self, fonte, file, frase, color):
+        # Criando o texto
+        self.texto = Texto(fonte, frase, 800, color)
+
+        # Salvando as caminho da imagem
+        self.file = file
+
+        # Abrindo e desenhando o canvas
+        self.imagem = Image.open(file)
+        self.pintura = ImageDraw.Draw(self.imagem)
+
+        # Processando informacoes da imagem
+        self.nome = self.file.split('/')[-1]
+        self.sizeW, self.sizeH = self.imagem.size
 
 
+    def drawTextInCanvas(self):
+        #Calcula do tamanho do texto na imagem
+        self.texto.sizeH, self.texto.sizeW = self.pintura.textsize(self.texto.frase, self.texto.fonte)
+
+        #Calculando o meio da imagem
+        middleW = (self.sizeW/2 - self.texto.sizeW/2)
+        middleH = (self.sizeH/2 - self.texto.sizeH/2)
+
+        # Pintar o texto no meio da imagem
+        self.pintura.text((middleH, middleW), self.texto.frase, fill = self.texto.color, font = self.texto.fonte, align='center')
+
+    def save(self):
+        self.imagem.save("New_" + self.nome)
+
+    def show(self):
+        self.imagem.show()
 
 
-# Get the name input passed
-if len(sys.argv) > 2:
-    nObra = sys.argv[1]
-    nAutor = sys.argv[2]
-else:
-    nObra = "Calling of\nSt. Matthew"
-    nAutor = 'Michelangelo Merisi da Caravaggio'
+def main():
+    wall = Picture("data/font/Pirata_One/PirataOne-Regular.ttf", "data/calling-of-saint-matthew.jpeg", "Calling of\nSt. Matthew", 'rgb(255, 255, 255)')
+    wall.drawTextInCanvas()
+    wall.save()
 
-font = "data/font/Pirata_One/PirataOne-Regular.ttf"
-imageDir = "data/calling-of-saint-matthew.jpeg"
-color = 'rgb(255, 255, 255)'
-
-
-# create Image object with the input image
-image = Image.open(imageDir)
-
-# Get the size of the image
-w, h = image.size
-
-# initialise the drawing context with
-# the image object as background
-draw = ImageDraw.Draw(image)
-
-# create font object with the font file and specify
-# desired size
-fonte_obra = ImageFont.truetype(font, size=600)
-fonte_autor = ImageFont.truetype(font, size=150)
-
-# Get the size of the message
-obra_w, obra_h = draw.textsize(nObra, fonte_obra)
-
-# draw the message on the background
-draw.multiline_text((w/2 - obra_w/2 ,h/2 - obra_h/2), nObra, fill=color, font=fonte_obra, align='center')
-
-# Get the size of the message
-autor_w, autor_h = draw.textsize(nAutor, fonte_autor)
-
-# draw the message on the background
-draw.text((w/2 - autor_w/2, h/2 + obra_h/2), nAutor, fill=color, font=fonte_autor)
-
-# save the edited image
-image.save("New_" + imageDir.split('/')[-1])
-
-#loadImage
-image.show()
+if __name__ == "__main__":
+    main()
