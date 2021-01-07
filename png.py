@@ -62,34 +62,43 @@ def main():
 
     parser = argparse.ArgumentParser(
         description="Welcome to the PNG a app. An app created inspired after the NerdWriter1 art thumbnails",
-        usage="%(prog)s [-p] [-t] [-a]",
+        usage="%(prog)s [-p] [-t] [-a] [-c]",
     )
     parser.add_argument(
         "-p",
         "--path",
         type=str,
         metavar="",
-        help="The path to the image",
+        help="The path to the image that will be modified",
     )
     parser.add_argument(
         "-t",
         "--title",
         type=str,
         metavar="",
-        help="The main text printed in the image between \" \" ",
+        help="The main text printed in the image between \" ",
     )
     parser.add_argument(
         "-a",
         "--author",
         type=str,
         metavar="",
-        help="The secondary text printed in the image between \" \"",
+        help="The secondary text printed in the image between \" ",
+    )
+    parser.add_argument(
+        "-c",
+        "--color",
+        type=str,
+        metavar="",
+        help="The hex of the color used in the text. Default is #FFFFFF (do not need the charactere #)",
     )
 
     args = parser.parse_args()
 
+    path = ""
     title = ""
     author = ""
+    color = "#FFFFFF"
 
     if not (args.path):
         parser.error("The path to the image nedd to be passed with --path")
@@ -101,9 +110,11 @@ def main():
             title = args.title
         if args.author:
             author = args.author
+        if args.color:
+            color = "#"+args.color
 
     print(path)
-    wall = Picture("data/font/Pirata_One/PirataOne-Regular.ttf", path,  title, author, 'rgb(255, 255, 255)')
+    wall = Picture("data/font/Pirata_One/PirataOne-Regular.ttf", path,  title, author, color)
     # wall = Picture("data/font/Pirata_One/PirataOne-Regular.ttf", "data/calling-of-saint-matthew.jpeg", "Calling of\nSt. Matthew","Danielli dos Reis Costa", 'rgb(255, 255, 255)')
     wall.drawTextInCanvas()
     wall.save()
