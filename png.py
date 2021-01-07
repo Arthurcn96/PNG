@@ -18,10 +18,6 @@ class Texto:
 class Picture(object):
 
     def __init__(self, fonte, file, titulo, autor, color):
-        # Criando o texto
-        self.title = Texto(fonte, titulo, 800, color)
-        self.author = Texto(fonte, autor, 350, color)
-
         # Salvando as caminho da imagem
         self.file = file
 
@@ -33,23 +29,27 @@ class Picture(object):
         self.nome = self.file.split('/')[-1]
         self.sizeW, self.sizeH = self.imagem.size
 
+        # Criando o texto
+        self.title = Texto(fonte, titulo, int(self.sizeH/6.5), color)
+        self.author = Texto(fonte, autor, int(self.sizeH/14.2), color)
+
 
     def drawTextInCanvas(self):
         #Calcula do tamanho do texto na imagem
-        self.title.sizeH, self.title.sizeW = self.pintura.textsize(self.title.frase, self.title.fonte)
-        self.author.sizeH, self.author.sizeW = self.pintura.textsize(self.author.frase, self.author.fonte)
+        self.title.sizeW, self.title.sizeH = self.pintura.textsize(self.title.frase, self.title.fonte)
+        self.author.sizeW, self.author.sizeH  = self.pintura.textsize(self.author.frase, self.author.fonte)
 
-        #Calculando o meio da imagemv para texto
-        middleW = (self.sizeW/2 - (self.title.sizeW + self.author.sizeW)/2)
-        middleH = (self.sizeH/2 - self.title.sizeH/2)
+        #Calculando o meio da imagem para texto
+        middleW = (self.sizeW/2 - (self.title.sizeW)/2)
+        middleH = (self.sizeH/2 - (self.title.sizeH + self.author.sizeH)/2)
 
-        #Calculando o meio da imagemv para author
-        middleAuthorH = (self.sizeH/2 - self.author.sizeH/2)
-        middleAuthorW = (self.sizeW/2 + self.title.sizeW/2)
+        #Calculando o meio da imagem para author
+        middleAuthorW = (self.sizeW/2 - (self.author.sizeW)/2)
+        middleAuthorH = (self.sizeH/2 + (self.title.sizeH)/4 )
 
         # Pintar o texto no meio da imagem
-        self.pintura.text((middleH, middleW), self.title.frase, fill = self.title.color, font = self.title.fonte, align='center')
-        self.pintura.text((middleAuthorH, middleAuthorW), self.author.frase, fill = self.author.color, font = self.author.fonte, align='center')
+        self.pintura.text((middleW, middleH, ), self.title.frase, fill = self.title.color, font = self.title.fonte, align='center')
+        self.pintura.text((middleAuthorW, middleAuthorH ), self.author.frase, fill = self.author.color, font = self.author.fonte, align='center')
 
     def save(self):
         self.imagem.save("New_" + self.nome)
@@ -62,7 +62,14 @@ def main():
 
     parser = argparse.ArgumentParser(
         description="Welcome to the PNG a app. An app created inspired after the NerdWriter1 art thumbnails",
-        usage="%(prog)s [-t] [-a]",
+        usage="%(prog)s [-p] [-t] [-a]",
+    )
+    parser.add_argument(
+        "-p",
+        "--path",
+        type=str,
+        metavar="",
+        help="The path to the image",
     )
     parser.add_argument(
         "-t",
@@ -84,12 +91,19 @@ def main():
     title = ""
     author = ""
 
-    if args.title:
-        title = args.title
-    if args.author:
-        author = args.author
+    if not (args.path):
+        parser.error("The path to the image nedd to be passed with --path")
+        exit()
+    else:
+        if args.path:
+            path = args.path
+        if args.title:
+            title = args.title
+        if args.author:
+            author = args.author
 
-    wall = Picture("data/font/Pirata_One/PirataOne-Regular.ttf", "data/calling-of-saint-matthew.jpeg", title,author, 'rgb(255, 255, 255)')
+    print(path)
+    wall = Picture("data/font/Pirata_One/PirataOne-Regular.ttf", path,  title, author, 'rgb(255, 255, 255)')
     # wall = Picture("data/font/Pirata_One/PirataOne-Regular.ttf", "data/calling-of-saint-matthew.jpeg", "Calling of\nSt. Matthew","Danielli dos Reis Costa", 'rgb(255, 255, 255)')
     wall.drawTextInCanvas()
     wall.save()
