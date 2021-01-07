@@ -1,6 +1,7 @@
 #!/bin/python3
 
 import sys
+import argparse
 from PIL import Image, ImageDraw, ImageFont
 
 class Texto:
@@ -58,7 +59,38 @@ class Picture(object):
 
 
 def main():
-    wall = Picture("data/font/Pirata_One/PirataOne-Regular.ttf", "data/calling-of-saint-matthew.jpeg", "Calling of\nSt. Matthew","Danielli dos Reis Costa", 'rgb(255, 255, 255)')
+
+    parser = argparse.ArgumentParser(
+        description="Welcome to the PNG a app. An app created inspired after the NerdWriter1 art thumbnails",
+        usage="%(prog)s [-t] [-a]",
+    )
+    parser.add_argument(
+        "-t",
+        "--title",
+        type=str,
+        metavar="",
+        help="The main text printed in the image between \" \" ",
+    )
+    parser.add_argument(
+        "-a",
+        "--author",
+        type=str,
+        metavar="",
+        help="The secondary text printed in the image between \" \"",
+    )
+
+    args = parser.parse_args()
+
+    title = ""
+    author = ""
+
+    if args.title:
+        title = args.title
+    if args.author:
+        author = args.author
+
+    wall = Picture("data/font/Pirata_One/PirataOne-Regular.ttf", "data/calling-of-saint-matthew.jpeg", title,author, 'rgb(255, 255, 255)')
+    # wall = Picture("data/font/Pirata_One/PirataOne-Regular.ttf", "data/calling-of-saint-matthew.jpeg", "Calling of\nSt. Matthew","Danielli dos Reis Costa", 'rgb(255, 255, 255)')
     wall.drawTextInCanvas()
     wall.save()
 
