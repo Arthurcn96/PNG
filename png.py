@@ -61,7 +61,7 @@ class Picture(object):
 def main():
 
     parser = argparse.ArgumentParser(
-        description="Welcome to the PNG a app. An app created inspired after the NerdWriter1 art thumbnails",
+        description="Welcome to the PNG. An app created inspired after the NerdWriter1 art thumbnails",
         usage="%(prog)s [-p] [-t] [-a] [-c]",
     )
     parser.add_argument(
@@ -101,7 +101,7 @@ def main():
     color = "#FFFFFF"
 
     if not (args.path):
-        parser.error("The path to the image nedd to be passed with --path")
+        parser.error("The path to the image need to be passed with --path")
         exit()
     else:
         if args.path:
